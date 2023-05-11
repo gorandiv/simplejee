@@ -1,4 +1,4 @@
-package com.example.appointmentapp;
+package com.example.appointmentapp.controller;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
