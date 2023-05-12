@@ -1,0 +1,27 @@
+version: '3'
+services:
+  jee-app:
+    image: my-app
+    restart: always
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    networks:
+      - app-net
+  mongo:
+    restart: always
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    networks:
+      - app-net
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - app-net
+networks:
+  app-net:
