@@ -1,9 +1,11 @@
+
 package com.example.appointmentapp.controller;
 
 import com.example.appointmentapp.model.PublicHoliday;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HttpMethod;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
@@ -15,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+
 
 /**
  * @author goran.divovic
@@ -30,11 +33,11 @@ public class PublicHolidayResource {
         URL obj = new URL(EXTERNAL_API_URL);
 
         HttpURLConnection urlConnection = (HttpURLConnection) obj.openConnection();
-        urlConnection.setRequestMethod("GET");
+        urlConnection.setRequestMethod(HttpMethod.GET);
 
         BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
         String inputLine;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         while((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
@@ -42,8 +45,10 @@ public class PublicHolidayResource {
 
         String jsonResponse = response.toString();
         ObjectMapper mapper = new ObjectMapper();
-        List<PublicHoliday> holidays = mapper.readValue(jsonResponse, new TypeReference<List<PublicHoliday>>(){});
+        List<PublicHoliday> holidays = mapper.readValue(jsonResponse, new TypeReference<>() {
+        });
 
         return Response.ok(holidays).build();
     }
 }
+

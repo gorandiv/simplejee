@@ -1,5 +1,7 @@
 package com.example.appointmentapp.model;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
 
 /**
@@ -7,8 +9,10 @@ import java.util.Date;
  */
 public class Appointment {
 
+    @NotNull
     private String id;
 
+    @NotNull
     private String title;
 
     private Date date;
@@ -16,6 +20,17 @@ public class Appointment {
     private String location;
 
     private String detail;
+
+    public Appointment() {
+
+    }
+
+    public Appointment(String title, Date date, String location, String detail) {
+        this.title = title;
+        this.date = date;
+        this.location = location;
+        this.detail = detail;
+    }
 
     public String getId() {
         return id;
@@ -56,4 +71,5 @@ public class Appointment {
     public void setDetail(String detail) {
         this.detail = detail;
     }
+
 }
