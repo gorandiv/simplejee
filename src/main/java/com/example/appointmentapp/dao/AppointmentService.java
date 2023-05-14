@@ -10,6 +10,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +30,15 @@ public class AppointmentService {
         MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
         MongoDatabase database = mongoClient.getDatabase(DB_NAME);
         collection = database.getCollection(DB_COLLECTION_NAME);
+        createAppointmentInDatabase();
     }
 
     /**
      * Find ({@link Appointment} by given id.
      *
-     * @param id String Identifier of Appointment
+     * @param id String Identifier of Appointment.
      *
-     * @return {@link Optional} value of found {@link Document}
+     * @return {@link Optional} value of found {@link Document}.
      * */
     public Optional<Document> findById(String id) {
         try {
@@ -50,7 +52,7 @@ public class AppointmentService {
     /**
      * Find all appointments {@link Appointment} in database.
      *
-     * @return list of appointments
+     * @return list of appointments.
      * */
     public List<Appointment> findALl() {
         List<Appointment> appointmentList = new ArrayList<>();
@@ -86,5 +88,14 @@ public class AppointmentService {
      * */
     public void delete(Document document) {
         collection.deleteOne(document);
+    }
+
+    private void createAppointmentInDatabase() {
+        Document document = new Document();
+        document.put("title", "title1");
+        document.put("date", new Date());
+        document.put("location", "location1");
+        document.put("detail", "detail1");
+        collection.insertOne(document);
     }
 }

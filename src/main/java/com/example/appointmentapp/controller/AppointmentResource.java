@@ -1,6 +1,6 @@
 package com.example.appointmentapp.controller;
 
-import com.example.appointmentapp.dao.AppointmentDao;
+import com.example.appointmentapp.dao.AppointmentService;
 import com.example.appointmentapp.model.Appointment;
 import com.example.appointmentapp.utility.AppointmentDocumentMapper;
 import jakarta.inject.Inject;
@@ -15,17 +15,17 @@ import java.util.Optional;
 /**
  * @author goran.divovic
  */
-@Path("/appointment")
+@Path("/v1/appointment")
 public class AppointmentResource {
 
     @Inject
-    AppointmentDao appointmentDao;
+    AppointmentService appointmentService;
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
-        Optional<Document> appointment = appointmentDao.findById(id);
+        Optional<Document> appointment = appointmentService.findById(id);
         if (appointment.isPresent()) {
             return Response.ok(AppointmentDocumentMapper.toAppointment(appointment.get())).build();
         } else {
@@ -37,7 +37,7 @@ public class AppointmentResource {
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        List<Appointment> appointments = appointmentDao.findALl();
+        List<Appointment> appointments = appointmentService.findALl();
         if (!appointments.isEmpty()) {
             return Response.ok(appointments).build();
         } else {
@@ -51,7 +51,7 @@ public class AppointmentResource {
         if (appointment.getTitle() == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing mandatory attribute - title").build();
         }
-        appointmentDao.save(appointment);
+        appointmentService.save(appointment);
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -62,9 +62,9 @@ public class AppointmentResource {
         if (appointment.getTitle() == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing mandatory attribute - title").build();
         }
-        Optional<Document> existingDocument = appointmentDao.findById(id);
+        Optional<Document> existingDocument = appointmentService.findById(id);
         if (existingDocument.isPresent()) {
-            appointmentDao.update(existingDocument.get(), AppointmentDocumentMapper.toDocument(appointment));
+            appointmentService.update(existingDocument.get(), AppointmentDocumentMapper.toDocument(appointment));
             return Response.noContent().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
@@ -74,9 +74,9 @@ public class AppointmentResource {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") String id) {
-        Optional<Document> existingDocument = appointmentDao.findById(id);
+        Optional<Document> existingDocument = appointmentService.findById(id);
         if (existingDocument.isPresent()) {
-            appointmentDao.delete(existingDocument.get());
+            appointmentService.delete(existingDocument.get());
             return Response.noContent().build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();

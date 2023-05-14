@@ -10,9 +10,11 @@ import org.bson.types.ObjectId;
 public class AppointmentDocumentMapper {
 
     /**
-     * Map values from Appointment to Document.
+     * Map values from {@link Appointment} to {@link Document}.
      *
-     * @param appointment - Appointment object to be mapped into Document.
+     * @param appointment Appointment object to be mapped into Document.
+     *
+     * @return an Appointment object mapped from Document.
      * */
     public static Document toDocument(Appointment appointment) {
         Document document = new Document();
@@ -28,9 +30,11 @@ public class AppointmentDocumentMapper {
     }
 
     /**
-     * Map values from Document to Appointment.
+     * Map values from {@link Document} to {@link Appointment}.
      *
-     * @param document - Document object to be mapped into Appointment.
+     * @param document Document object to be mapped into Appointment.
+     *
+     * @return a Document object mapped from Appointment.
      * */
     public static Appointment toAppointment(Document document) {
         Appointment appointment = new Appointment();

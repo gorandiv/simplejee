@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author goran.divovic
  */
-@Path("/public-holidays")
+@Path("/v1/public-holidays")
 public class PublicHolidayResource {
 
     private static final String EXTERNAL_API_URL = "https://date.nager.at/api/v2/publicholidays/2020/RS";
