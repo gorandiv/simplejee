@@ -4,6 +4,9 @@ import com.example.appointmentapp.model.Appointment;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 /**
  * @author goran.divovic
  */
@@ -38,11 +41,17 @@ public class AppointmentDocumentMapper {
      * */
     public static Appointment toAppointment(Document document) {
         Appointment appointment = new Appointment();
-        appointment.setId(document.getObjectId("_id").toString());
-        appointment.setTitle(document.getString("title"));
-        appointment.setDate(document.getDate("date"));
-        appointment.setLocation(document.getString("location"));
-        appointment.setDetail(document.getString("detail"));
+        try {
+            appointment.setId(document.getObjectId("_id").toString());
+            appointment.setTitle(document.getString("title"));
+            if(document.getString("date") != null) {
+                appointment.setDate(new SimpleDateFormat("yyyy-MM-dd").parse(document.getString("date")));
+            }
+            appointment.setLocation(document.getString("location"));
+            appointment.setDetail(document.getString("detail"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return appointment;
     }

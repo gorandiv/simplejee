@@ -1,5 +1,6 @@
 package com.example.appointmentapp.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  */
 public class PublicHoliday {
 
-    private Date date;
+    private String date;
     private String localName;
     private String name;
     private String countryCode;
@@ -18,12 +19,12 @@ public class PublicHoliday {
     private Integer launchYear;
     private String type;
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     public String getLocalName() {

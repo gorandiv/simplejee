@@ -2,6 +2,7 @@ package com.example.appointmentapp.model;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -11,21 +12,16 @@ public class Appointment {
 
     @NotNull
     private String id;
-
     @NotNull
     private String title;
-
-    private Date date;
-
+    private String date;
     private String location;
-
     private String detail;
-
     public Appointment() {
 
     }
 
-    public Appointment(String title, Date date, String location, String detail) {
+    public Appointment(String title, String date, String location, String detail) {
         this.title = title;
         this.date = date;
         this.location = location;
@@ -48,12 +44,12 @@ public class Appointment {
         this.title = title;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 
     public String getLocation() {
