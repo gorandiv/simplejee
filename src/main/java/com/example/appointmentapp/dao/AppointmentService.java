@@ -19,8 +19,6 @@ import java.util.Optional;
 @Singleton
 public class AppointmentService {
 
-    private static MongoClient mongoClient;
-    private static MongoDatabase database;
     private static MongoCollection<Document> collection;
     private static final String DB_NAME = "appointmentdb";
     private static final String DB_COLLECTION_NAME = "appointment";
@@ -28,8 +26,8 @@ public class AppointmentService {
     @PostConstruct
     public void init() {
         //todo: @goran.divovic change locahost to mongo to provide setup for docker
-        mongoClient = MongoClients.create("mongodb://localhost:27017");
-        database = mongoClient.getDatabase(DB_NAME);
+        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        MongoDatabase database = mongoClient.getDatabase(DB_NAME);
         collection = database.getCollection(DB_COLLECTION_NAME);
     }
 
