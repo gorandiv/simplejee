@@ -1,6 +1,7 @@
 package com.example.appointmentapp.controller;
 
-import com.example.appointmentapp.dao.AppointmentService;
+import com.example.appointmentapp.dto.AppointmentDto;
+import com.example.appointmentapp.service.AppointmentService;
 import com.example.appointmentapp.model.Appointment;
 import com.example.appointmentapp.utility.AppointmentDocumentMapper;
 import jakarta.inject.Inject;
@@ -20,6 +21,18 @@ public class AppointmentResource {
 
     @Inject
     AppointmentService appointmentService;
+
+    @GET
+    @Path("/holiday/{date}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getOnDate(@PathParam("date") String date) {
+        List<AppointmentDto> appointmentDtos = appointmentService.findAppointmentForPublicHolidayByDate(date);
+        if (!appointmentDtos.isEmpty()) {
+            return Response.ok(appointmentDtos).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 
     @GET
     @Path("/{id}")

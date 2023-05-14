@@ -1,4 +1,4 @@
-package com.example.appointmentapp.model;
+package com.example.appointmentapp.dto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

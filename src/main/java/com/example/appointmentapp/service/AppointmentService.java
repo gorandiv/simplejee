@@ -1,14 +1,18 @@
-package com.example.appointmentapp.dao;
+package com.example.appointmentapp.service;
 
+import com.example.appointmentapp.dto.AppointmentDto;
 import com.example.appointmentapp.model.Appointment;
+import com.example.appointmentapp.dto.PublicHoliday;
 import com.example.appointmentapp.utility.AppointmentDocumentMapper;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +23,9 @@ import java.util.Optional;
  */
 @Singleton
 public class AppointmentService {
+
+    @Inject
+    PublicHolidayService publicHolidayService;
 
     private static MongoCollection<Document> collection;
     private static final String DB_NAME = "appointmentdb";
@@ -47,6 +54,26 @@ public class AppointmentService {
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
+    }
+
+    public List<AppointmentDto> findAppointmentForPublicHolidayByDate(String inputDate) {
+
+        List<AppointmentDto> appointmentDtoList = new ArrayList<>();
+
+        Optional<PublicHoliday> publicHoliday = publicHolidayService.getPublicHolidaysForDate(inputDate);
+        if(publicHoliday.isPresent()) {
+            List<Appointment> appointmentList = new ArrayList<>();
+            for (Document document : collection.find(Filters.eq("date", inputDate))) {
+                appointmentList.add(AppointmentDocumentMapper.toAppointment(document));
+            }
+
+            for (Appointment app : appointmentList) {
+                AppointmentDto dto = new AppointmentDto(publicHoliday.get().getName(), app.getTitle(), app.getDate(), app.getDetail());
+                appointmentDtoList.add(dto);
+            }
+        }
+
+        return appointmentDtoList;
     }
 
     /**
@@ -93,7 +120,7 @@ public class AppointmentService {
     private void createAppointmentInDatabase() {
         Document document = new Document();
         document.put("title", "title1");
-        document.put("date", new Date());
+        document.put("date", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         document.put("location", "location1");
         document.put("detail", "detail1");
         collection.insertOne(document);
