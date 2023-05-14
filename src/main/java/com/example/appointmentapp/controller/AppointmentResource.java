@@ -35,7 +35,7 @@ public class AppointmentResource {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         Optional<Document> appointment = appointmentService.findById(id);
@@ -69,7 +69,7 @@ public class AppointmentResource {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/update/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Appointment appointment) {
         if (appointment.getTitle() == null) {
@@ -85,7 +85,7 @@ public class AppointmentResource {
     }
 
     @DELETE
-    @Path("/{id}")
+    @Path("/delete/{id}")
     public Response delete(@PathParam("id") String id) {
         Optional<Document> existingDocument = appointmentService.findById(id);
         if (existingDocument.isPresent()) {

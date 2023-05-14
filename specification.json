@@ -11,37 +11,247 @@
     }
   ],
   "paths": {
-    "/appointment/all": {
+    "/v1/appointment/holiday/{date}": {
       "get": {
-        "summary": "Get a list of users",
-        "description": "Returns a list of all users in the system.",
+        "summary": "Get appointments on public holiday by date",
+        "description": "Returns a list of appointments on a public holiday for a given date.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "description": "Date of the public holiday (format: yyyy-MM-dd)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "A list of users.",
+            "description": "A list of appointments on a public holiday for the given date",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "integer",
-                        "description": "The user's ID."
-                      },
-                      "name": {
-                        "type": "string",
-                        "description": "The user's name."
-                      },
-                      "email": {
-                        "type": "string",
-                        "description": "The user's email address."
-                      }
-                    }
+                    "$ref": "#/components/schemas/AppointmentDto"
                   }
                 }
               }
             }
+          },
+          "404": {
+            "description": "No appointments found on public holiday on the given date."
+          }
+        }
+      }
+    },
+    "/v1/appointment/find/{id}": {
+      "get": {
+        "summary": "Get appointment by ID",
+        "description": "Returns an appointment object for the given ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An appointment object for the given ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Appointment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No appointment found with the given ID"
+          }
+        }
+      }
+    },
+    "/v1/appointment/all": {
+      "get": {
+        "summary": "Get all appointments",
+        "description": "Returns a list of all appointments.",
+        "responses": {
+          "200": {
+            "description": "A list of all appointments",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Appointment"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No appointments found"
+          }
+        }
+      }
+    },
+    "/v1/appointment": {
+      "post": {
+        "summary": "Create a new appointment",
+        "operationId": "createAppointment",
+        "requestBody": {
+          "description": "Appointment object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Appointment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Appointment created"
+          },
+          "400": {
+            "description": "Missing mandatory attribute - title"
+          }
+        }
+      }
+    },
+    "/v1/appointment/update/{id}": {
+      "put": {
+        "summary": "Update an appointment by ID",
+        "description": "Updates an existing appointment with the given ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment to update",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated appointment object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Appointment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Appointment updated successfully"
+          },
+          "400": {
+            "description": "Missing mandatory attribute - title"
+          },
+          "404": {
+            "description": "Appointment with the given ID not found"
+          }
+        }
+      }
+    },
+    "/v1/appointment/delete/{id}": {
+      "delete": {
+        "summary": "Delete an appointment by ID",
+        "description": "Deletes the appointment identified by the given ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the appointment to be deleted",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Appointment deleted successfully"
+          },
+          "404": {
+            "description": "Appointment not found"
+          }
+        }
+      }
+    },
+    "/v1/public-holidays": {
+      "get": {
+        "summary": "Get public holidays in Serbia",
+        "description": "Returns a list of PublicHolidays in Serbia",
+        "responses": {
+          "200": {
+            "description": "A list of public holidays in Serbia",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AppointmentDto": {
+        "type": "object",
+        "properties": {
+          "publicHolidayName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      },
+      "Appointment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "location": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
           }
         }
       }
