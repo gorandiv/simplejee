@@ -33,8 +33,8 @@ public class AppointmentService {
 
     @PostConstruct
     public void init() {
-        //todo: @goran.divovic change locahost to mongo to provide setup for docker
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017");
+        // MongoClient mongoClientLocal = MongoClients.create("mongodb://localhost:27017");
+        MongoClient mongoClient = MongoClients.create("mongodb://mongo:27017");
         MongoDatabase database = mongoClient.getDatabase(DB_NAME);
         collection = database.getCollection(DB_COLLECTION_NAME);
         createAppointmentInDatabase();
