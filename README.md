@@ -24,10 +24,12 @@ Note: Appointment consists of title, date, location and detail.
 
 When you receive / download docker image, apply following steps:
 - Open location where is image file downloaded
-- Open terminal on that location and run command:`docker load -i <docker_image_name>`
-- After image is loaded in the same terminal run command: `docker-compose up`
+- Open terminal on that location and run command:`docker load -i <docker_image_name>` (Should see message like: `Loaded image: my-app:latest`)
+- Download [docker-compose file](https://github.com/gorandiv/simplejee/blob/main/docker-compose.yml) in the same directory.
+- After image is loaded and docker-compose file is downloaded, in the same terminal run command: `docker-compose up`
 
-After those steps application should be available for testing (e.g. using Postman).
+After those steps application should be available for testing.
+Postman Collection is available [here](https://drive.google.com/file/d/1ZJbxDNSfJVdUcJWm8OP1WdK1_2RKFMAJ/view?usp=drive_link)
 
 
 ### Review
