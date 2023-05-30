@@ -56,7 +56,7 @@ public class PublicHolidayService {
     public Optional<PublicHoliday> getPublicHolidaysForDate(String date) {
         try {
             return Optional.of(
-                    getPublicHolidays().stream().findFirst().filter(ph -> ph.getDate().equals(date)).get());
+                    getPublicHolidays().stream().filter(ph -> ph.getDate().equals(date)).findFirst().get());
         } catch (IOException e) {
             e.printStackTrace();
             return Optional.empty();
